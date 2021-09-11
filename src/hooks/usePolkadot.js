@@ -15,8 +15,8 @@ export default () => {
 
 
   const getFile = useCallback(
-    async () => {
-      const result = await api.query.evercity.bondRegistry(bondID);
+    async (id) => {
+      const result = await api.query.audit.fileByID(id);
 
       return result?.toJSON();
     },
@@ -24,14 +24,14 @@ export default () => {
   );
 
   const createFile = useCallback(
-    async (tag, hash) => {
+    async (tag, filehash) => {
       const currentUserAddress = getCurrentUserAddress();
 
       try {
         await api
           .tx
           .audit
-          .bondRedeem(tag, hash)
+          .createNewFile(tag, filehash)
           .signAndSend(
             currentUserAddress,
             {
