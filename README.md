@@ -11,10 +11,10 @@ You can find available node commands using node explorer via http://localhost
 
 ## Tasks
 
-1. Implement polkadot address selection from polkadot extension and store it in localstorage (use antd selector)
-2. Implement functions assignAuditor and signLatestVersion. You can use functions from src/hooks/usePolkadot as an example
-3. Create pages for showing file data, auditor assignment, creating and signing a file. Addresses for creation and signing file must be different.
-4. Page for creating file should have file uploader component and be able to calculate file hash which must be saved into the blockchain
+1. Implement polkadot address selection from polkadot extension and store it in localstorage (use antd selector);
+2. Implement functions assignAuditor and signLatestVersion. You can use functions from src/hooks/usePolkadot as an example;
+3. Create pages for showing file data, auditor assignment, creating and signing a file. Addresses for creation and signing file must be different;
+4. Page for creating file should have file uploader component and be able to calculate file hash which must be saved into the blockchain.
 
 ## Bonus tasks
 
