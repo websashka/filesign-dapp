@@ -29,12 +29,6 @@ const connect = async () => ApiPromise.create({
   provider: wsProvider,
 });
 
-const getInjector = async () => {
-  
-
-  return injector;
-};
-
 const App = () => {
   const { polkadotState, dispatch } = useContext(store);
 
