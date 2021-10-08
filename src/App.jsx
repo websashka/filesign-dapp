@@ -15,6 +15,8 @@ import { Spin } from 'antd';
 
 import { store } from './components/PolkadotProvider';
 
+import types from './types.json';
+
 const wsProvider = new WsProvider('ws://localhost:9944');
 
 wsProvider.on('disconnected', () => {
@@ -27,6 +29,7 @@ wsProvider.on('error', (error) => {
 
 const connect = async () => ApiPromise.create({
   provider: wsProvider,
+  types
 });
 
 const App = () => {

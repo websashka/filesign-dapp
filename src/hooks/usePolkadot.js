@@ -13,6 +13,14 @@ export default () => {
   const { polkadotState } = useContext(store);
   const { api, injector } = polkadotState;
 
+  const getLastId = useCallback(
+    async () => {
+      const result = await api.query.audit.lastID();
+
+      return result?.toHuman();
+    },
+    [api],
+  );
 
   const getFile = useCallback(
     async (id) => {
@@ -58,8 +66,31 @@ export default () => {
     ],
   );
 
+  const assignAuditor = useCallback(
+    async (id, address) => {
+      // use assignAuditor extinsic
+    },
+    [
+      api,
+      injector,
+    ],
+  );
+
+  const signFile = useCallback(
+    async (id, address) => {
+      // use signLatestVersion extinsic
+    },
+    [
+      api,
+      injector,
+    ],
+  );
+
   return {
+    getLastId,
     getFile,
     createFile,
+    assignAuditor,
+    signFile,
   };
 };
