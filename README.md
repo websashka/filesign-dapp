@@ -1,5 +1,22 @@
 # Filesign dApp
 
+Decentralized app that allows to store file hashes and signatures in polkadot blockchain
+
+Main functions:
+- file creation
+- auditor assignment
+- signing file
+- file info explorer
+
+## Main flow
+
+There must be at least 2 addresses: a (file) owner and auditor(s)
+- owner uploads a file blob and store it's hash in the blockchain
+- owner assigns auditor(s) which has an access to sign that file
+- auditor signs the file
+
+Also it's neccessary to see file info at any stage of the flow
+
 ## Quick Start
 
 1. Run command `bash up_node.sh`
