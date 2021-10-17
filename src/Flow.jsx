@@ -8,7 +8,6 @@ import {SignFile} from "./pages/SignFile";
 import {GetFile} from "./pages/GetFile";
 import {useMemo} from "react";
 import {FileStore} from "./components/FileProvider";
-import {Status} from "./components/Status";
 import {DownOutlined} from "@ant-design/icons";
 import {getCurrentUserAddress} from "./utils/storage";
 
@@ -26,9 +25,6 @@ export const Flow = () => {
   const currentStep = useMemo(() => flow.indexOf(pathname), [pathname]);
   const { state: { file }, dispatch } = useContext(FileStore);
 
-  const statusFile = useMemo(() => {
-    return ''
-  }, [file]);
 
   const auditors =  (<Menu>
     {file?.auditors?.slice(1).map(auditor => (<Menu.Item>{auditor}</Menu.Item>))}
@@ -90,9 +86,6 @@ export const Flow = () => {
         <Descriptions.Item label="Owner" span={2}>{file?.owner}</Descriptions.Item>
         <Descriptions.Item span={2} label="File Hash">{file?.hash}</Descriptions.Item>
         <Descriptions.Item span={2} label="ID">{file?.id}</Descriptions.Item>
-        <Descriptions.Item span={2} label="Status">
-          {file && (<Status status={statusFile} />)}
-        </Descriptions.Item>
       </Descriptions>
     </Layout.Footer>
   </Layout>)

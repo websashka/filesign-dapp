@@ -1,9 +1,10 @@
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import { Card, Input, Typography } from "antd";
 import usePolkadot from "../../hooks/usePolkadot";
 import {CheckOutlined} from "@ant-design/icons";
 
 import styles from "./styles.module.less";
+import {Status} from "../../components/Status";
 
 export const GetFile = () => {
   const { getFile } = usePolkadot();
@@ -14,6 +15,16 @@ export const GetFile = () => {
     });
   }
 
+  const signed = useMemo(() => {
+    if(file && file.auditors.length === 0) {
+      return false;
+    }
+    if(file) {
+      return file.auditors.length === file.versions[file.versions.length - 1].signatures.filter(signature => signature.signed).length
+    }
+    return false;
+  },[file]);
+
   return(<div className={styles.container}>
     <Input.Search
       placeholder="Input file ID"
@@ -22,6 +33,7 @@ export const GetFile = () => {
     />
     {file && (<Card
       title={file.id}
+      extra={<Status signed={signed}/>}
     >
       <Typography.Text strong>Owner:</Typography.Text> {file.owner}
       <ul>
