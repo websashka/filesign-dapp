@@ -55,10 +55,10 @@ export default () => {
         });
       } catch (error) {
         notification.error({
-          message: 'Signing/sending transaction process failed',
-          description: 'Error',
+          message: e.message
         });
-        console.log(error)
+        console.log(e);
+        throw e;
       }
     },
     [
@@ -87,7 +87,11 @@ export default () => {
           message: 'Auditor Assign'
         });
       } catch (e) {
-        console.log(e)
+        notification.error({
+          message: e.message
+        });
+        console.log(e);
+        throw e;
       }
 
     },
@@ -117,7 +121,11 @@ export default () => {
           message: 'File Signed'
         });
       } catch (e) {
-        console.log(e)
+        notification.error({
+          message: e.message
+        });
+        console.log(e);
+        throw e;
       }
     },
     [

@@ -1,7 +1,7 @@
 import React, { createContext, useReducer } from 'react';
 
 const initialState = {
-
+  file: null
 };
 
 const FileStore = createContext(initialState);
@@ -14,7 +14,10 @@ const FileProvider = ({ children }) => {
       case 'set':
         return {
           ...state,
-          ...action.payload
+          file: {
+            ...state.file,
+            ...action.payload
+          }
         };
       case 'clear':
         return {

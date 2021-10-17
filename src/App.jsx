@@ -5,7 +5,7 @@ import { ApiPromise, WsProvider } from '@polkadot/api';
 import { web3FromSource, web3Enable } from '@polkadot/extension-dapp';
 
 
-import {Card, Descriptions, Layout, Modal, Select, Skeleton, Spin} from 'antd';
+import { Layout, Select, Skeleton, Spin} from 'antd';
 
 import { store } from './components/PolkadotProvider';
 
@@ -16,6 +16,7 @@ import {useAccounts} from "./hooks/useAccounts";
 import {forgetCurrentUser, getCurrentUserAddress, saveCurrentUser} from "./utils/storage";
 import {FileProvider} from "./components/FileProvider";
 import {Flow, Steps} from "./Flow";
+import {SiteBar} from "./components/SiteBar/SiteBar";
 const wsProvider = new WsProvider('ws://localhost:9944');
 
 wsProvider.on('disconnected', () => {
@@ -72,7 +73,6 @@ const App = () => {
   );
 
   const [authVisible, setAuthVisible] = useState(true);
-  const { accounts } = useAccounts();
 
   const [address, setAddress] = useState(getCurrentUserAddress());
 
@@ -81,7 +81,6 @@ const App = () => {
       setAuthVisible(false);
     }
   }, [address]);
-
 
   return (<>
     <Spin spinning={!isAPIReady} tip="Connecting to blockchain node">
@@ -96,22 +95,7 @@ const App = () => {
           setAuthVisible(true);
           forgetCurrentUser();
         }}>
-          {!address && (<Select
-            showSearch
-            value={address}
-            style={{ width: 200 }}
-            onSelect={(address) => {
-              setAddress(address);
-              saveCurrentUser(address);
-            }}
-            placeholder="Select a address"
-            optionFilterProp="children"
-            filterOption={(input, option) =>
-              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-            }
-          >
-            {accounts.map(account => (<Select.Option value={account.address}>{account.meta.name}</Select.Option>))}
-          </Select>)}
+          <SiteBar setAddress={setAddress} address={address} />
         </Layout.Sider>
       </Layout>
     </Spin>
