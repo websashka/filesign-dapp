@@ -1,22 +1,21 @@
-import React, { useEffect, useContext, useMemo } from 'react';
+import React, {useEffect, useContext, useMemo, useState} from 'react';
 import 'antd/dist/antd.css';
 
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { web3FromSource, web3Enable } from '@polkadot/extension-dapp';
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect
-} from 'react-router-dom';
 
-import { Spin } from 'antd';
+import {Card, Descriptions, Layout, Modal, Select, Skeleton, Spin} from 'antd';
 
 import { store } from './components/PolkadotProvider';
 
 import types from './types.json';
 
+import styles from "./styles.module.less";
+import {useAccounts} from "./hooks/useAccounts";
+import {forgetCurrentUser, getCurrentUserAddress, saveCurrentUser} from "./utils/storage";
+import {FileProvider} from "./components/FileProvider";
+import {Flow, Steps} from "./Flow";
 const wsProvider = new WsProvider('ws://localhost:9944');
 
 wsProvider.on('disconnected', () => {
@@ -72,28 +71,51 @@ const App = () => {
     [polkadotState],
   );
 
-  return (
-    <Router>
-      <Spin spinning={!isAPIReady} tip="Connecting to blockchain node">
-        <Switch>
-          <Route exact path="/">
-            <Redirect to="/get_file" />
-          </Route>
-          <Route path="/get_file">
-            <div />
-          </Route>
-          <Route path="/create_file">
-            <div />
-          </Route>
-          <Route path="/assign_auditor">
-            <div />
-          </Route>
-          <Route path="/sign_file">
-            <div />
-          </Route>
-        </Switch>
-      </Spin>
-    </Router>
+  const [authVisible, setAuthVisible] = useState(true);
+  const { accounts } = useAccounts();
+
+  const [address, setAddress] = useState(getCurrentUserAddress());
+
+  useEffect(() => {
+    if(address) {
+      setAuthVisible(false);
+    }
+  }, [address]);
+
+
+  return (<>
+    <Spin spinning={!isAPIReady} tip="Connecting to blockchain node">
+      <Layout className={styles.container}>
+          <FileProvider>
+            <Skeleton loading={!address} active>
+              <Flow />
+            </Skeleton>
+          </FileProvider>
+        <Layout.Sider theme="light" collapsible collapsed={!authVisible} width={300} onCollapse={() => {
+          setAddress(null);
+          setAuthVisible(true);
+          forgetCurrentUser();
+        }}>
+          {!address && (<Select
+            showSearch
+            value={address}
+            style={{ width: 200 }}
+            onSelect={(address) => {
+              setAddress(address);
+              saveCurrentUser(address);
+            }}
+            placeholder="Select a address"
+            optionFilterProp="children"
+            filterOption={(input, option) =>
+              option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+            }
+          >
+            {accounts.map(account => (<Select.Option value={account.address}>{account.meta.name}</Select.Option>))}
+          </Select>)}
+        </Layout.Sider>
+      </Layout>
+    </Spin>
+</>
   );
 };
 

@@ -32,14 +32,14 @@ export default () => {
   );
 
   const createFile = useCallback(
-    async (tag, filehash) => {
+    async (id, filehash) => {
       const currentUserAddress = getCurrentUserAddress();
 
       try {
         await api
           .tx
           .audit
-          .createNewFile(tag, filehash)
+          .createNewFile(id, filehash)
           .signAndSend(
             currentUserAddress,
             {
@@ -56,8 +56,9 @@ export default () => {
       } catch (error) {
         notification.error({
           message: 'Signing/sending transaction process failed',
-          description: error,
+          description: 'Error',
         });
+        console.log(error)
       }
     },
     [
@@ -68,7 +69,27 @@ export default () => {
 
   const assignAuditor = useCallback(
     async (id, address) => {
-      // use assignAuditor extinsic
+      const currentUserAddress = getCurrentUserAddress();
+
+      try {
+        await api
+          .tx
+          .audit
+          .assignAuditor(id, address)
+          .signAndSend(
+            currentUserAddress,
+            {
+              signer: injector.signer,
+              nonce: -1,
+            },
+            () => {});
+        notification.success({
+          message: 'Auditor Assign'
+        });
+      } catch (e) {
+        console.log(e)
+      }
+
     },
     [
       api,
@@ -77,8 +98,27 @@ export default () => {
   );
 
   const signFile = useCallback(
-    async (id, address) => {
-      // use signLatestVersion extinsic
+    async (id) => {
+      const currentUserAddress = getCurrentUserAddress();
+
+      try {
+        await api
+          .tx
+          .audit
+          .signLatestVersion(id)
+          .signAndSend(
+            currentUserAddress,
+            {
+              signer: injector.signer,
+              nonce: -1,
+            },
+            () => {});
+        notification.success({
+          message: 'File Signed'
+        });
+      } catch (e) {
+        console.log(e)
+      }
     },
     [
       api,
